@@ -1,4 +1,4 @@
-package net.refluxmc.refluxsurvivalscoreboard;
+package xyz.refluxmc.refluxsurvivalscoreboard;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 
@@ -24,8 +24,6 @@ public final class RefluxSurvivalScoreboard extends JavaPlugin implements Listen
 
     @Override
     public void onEnable() {
-        getLogger().info("Enabling RefluxSurvivalScoreboard.");
-
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             Bukkit.getPluginManager().registerEvents(this, this);
         } else {
@@ -86,16 +84,16 @@ public final class RefluxSurvivalScoreboard extends JavaPlugin implements Listen
 
         board.updateLines(
                 ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--------------------",
-                ChatColor.AQUA + "Players: ",
+                ChatColor.AQUA + "Online Players: ",
                 ChatColor.WHITE + playerCount,
                 "",
-                ChatColor.AQUA + "TPS: ",
+                ChatColor.AQUA + "Current TPS: ",
                 ChatColor.WHITE + getCurrentTPS(),
                 "",
-                ChatColor.AQUA + "Rank: ",
+                ChatColor.AQUA + "Your Rank: ",
                 ChatColor.WHITE + rankPlaceholder,
                 "",
-                ChatColor.AQUA + "refluxmc.net",
+                ChatColor.AQUA + "refluxmc.xyz",
                 ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--------------------"
         );
 }
