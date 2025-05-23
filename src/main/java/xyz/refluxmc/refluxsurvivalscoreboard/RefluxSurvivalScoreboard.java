@@ -1,21 +1,24 @@
 package xyz.refluxmc.refluxsurvivalscoreboard;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import fr.mrmicky.fastboard.FastBoard;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import java.lang.Math;
+import java.text.DecimalFormat;
 
 public final class RefluxSurvivalScoreboard extends JavaPlugin implements Listener {
 
@@ -24,10 +27,10 @@ public final class RefluxSurvivalScoreboard extends JavaPlugin implements Listen
 
     @Override
     public void onEnable() {
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI")) {
             Bukkit.getPluginManager().registerEvents(this, this);
         } else {
-            getLogger().warning("Could not find PlaceholderAPI! This plugin is required.");
+            getLogger().warning("Could not find PlaceholderAPI! Disabling...");
             Bukkit.getPluginManager().disablePlugin(this);
         }
 
@@ -37,21 +40,20 @@ public final class RefluxSurvivalScoreboard extends JavaPlugin implements Listen
             for (FastBoard board : this.boards.values()) {
                 updateBoard(board);
             }
-        }, 0, 20);
-        getLogger().info("Enabled RefluxSurvivalScoreboard.");
+        }, 0, 100);
+
+        getLogger().info("Starting RefluxSurvivalScoreboard.");
     }
 
     public String getCurrentTPS() {
         try {
             Object server = Bukkit.getServer().getClass().getMethod("getServer").invoke(Bukkit.getServer());
             double[] recentTps = (double[]) server.getClass().getField("recentTps").get(server);
-            if (recentTps[0] > 20.00) {
-                recentTps[0] = 20.00;
-            }
+            recentTps[0] = Math.min(20.00, recentTps[0]);
             return tpsFormat.format(recentTps[0]);
         } catch (Exception e) {
             e.printStackTrace();
-            return "N/A";
+            return "Unable to get recent tps!";
         }
     }
 
@@ -79,11 +81,11 @@ public final class RefluxSurvivalScoreboard extends JavaPlugin implements Listen
 
     private void updateBoard(FastBoard board) {
         Player player = board.getPlayer();
-        String rankPlaceholder = PlaceholderAPI.setPlaceholders(player, "%luckperms_primary_group_name%");
+        String rankPlaceholder = PlaceholderAPI.setPlaceholders(player, "%phoenix_player_rank%");
         String playerCount = PlaceholderAPI.setPlaceholders(player, "%server_online%");
 
         board.updateLines(
-                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--------------------",
+                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--*--------------*--",
                 ChatColor.AQUA + "Online Players: ",
                 ChatColor.WHITE + playerCount,
                 "",
@@ -93,10 +95,10 @@ public final class RefluxSurvivalScoreboard extends JavaPlugin implements Listen
                 ChatColor.AQUA + "Your Rank: ",
                 ChatColor.WHITE + rankPlaceholder,
                 "",
-                ChatColor.AQUA + "refluxmc.xyz",
-                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--------------------"
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "refluxmc.xyz",
+                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--*--------------*--"
         );
-}
+    }
 
     @Override
     public void onDisable() {

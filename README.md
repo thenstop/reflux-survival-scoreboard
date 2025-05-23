@@ -1,6 +1,7 @@
 # RefluxSurvivalScoreboard
-This is a basic plugin I made for a (close to) vanilla server which needed a scoreboard.
+This is a plugin I made for a (close to) vanilla server which needed a basic scoreboard.
 
-- Reads TPS, fixes bug where bukkit may return something higher than 20.
-- Reads current LuckPerms Group
-- Reads current playercount
+- Shows TPS, fixes >20 TPS bug 
+  - (technically not a bug but is due to certain circumstances and players would think it was weird)
+- Shows current Phoenix Core rank
+- Shows current playercount
