@@ -50,14 +50,14 @@ public final class RefluxSurvivalScoreboard extends JavaPlugin implements Listen
             double[] recentTps = (double[]) server.getClass().getField("recentTps").get(server);
             recentTps[0] = Math.min(20.00, recentTps[0]);
             return tpsFormat.format(recentTps[0]);
-        } catch (Exception e) {
-            return null;
+        } catch (Exception event) {
+            return getLogger().severe("This is never gonna get called.");
         }
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
-        Player player = e.getPlayer();
+    public void onJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
 
         FastBoard board = new FastBoard(player);
         board.updateTitle(ChatColor.AQUA + "" + ChatColor.BOLD + "Survival");
@@ -67,8 +67,8 @@ public final class RefluxSurvivalScoreboard extends JavaPlugin implements Listen
     }
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent e) {
-        Player player = e.getPlayer();
+    public void onQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
 
         FastBoard board = this.boards.remove(player.getUniqueId());
 
