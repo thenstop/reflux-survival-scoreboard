@@ -47,13 +47,11 @@ public final class RefluxSurvivalScoreboard extends JavaPlugin implements Listen
 
     public String getCurrentTPS() {
         try {
-            Object server = Bukkit.getServer().getClass().getMethod("getServer").invoke(Bukkit.getServer());
             double[] recentTps = (double[]) server.getClass().getField("recentTps").get(server);
             recentTps[0] = Math.min(20.00, recentTps[0]);
             return tpsFormat.format(recentTps[0]);
         } catch (Exception e) {
-            e.printStackTrace();
-            return "Unable to get recent tps!";
+            return null;
         }
     }
 
